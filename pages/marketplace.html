@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace | AgriConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 min-h-screen font-sans flex">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-green-700 text-white min-h-screen p-6 space-y-6">
+    <div class="text-2xl font-bold mb-6">🌿 AgriConnect</div>
+    <nav class="flex flex-col space-y-4">
+      <a href="dashboard.html" class="hover:bg-green-600 px-4 py-2 rounded">📊 Dashboard</a>
+      <a href="crop-planner.html" class="hover:bg-green-600 px-4 py-2 rounded">🌱 Crop Planner</a>
+      <a href="knowledge-hub.html" class="hover:bg-green-600 px-4 py-2 rounded">📚 Knowledge Hub</a>
+      <a href="marketplace.html" class="bg-green-800 px-4 py-2 rounded">🛒 Marketplace</a>
+      <a href="community.html" class="hover:bg-green-600 px-4 py-2 rounded">🤝 Community</a>
+      <a href="login.html" class="hover:bg-green-600 px-4 py-2 rounded text-red-300">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">🛒 AgriConnect Marketplace</h2>
+
+      <!-- Product Listing Form -->
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <form class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input type="text" placeholder="Product Name" class="border px-4 py-2 rounded">
+          <input type="number" placeholder="Price (₹/kg)" class="border px-4 py-2 rounded">
+          <button type="submit" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Add Product</button>
+        </form>
+      </div>
+
+      <!-- Product Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Tomatoes -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Tomatoes" class="w-full h-48 object-cover rounded mb-3">
+          <h3 class="text-xl font-semibold text-green-700">Tomatoes</h3>
+          <p class="text-gray-700">Fresh red tomatoes, perfect for salads and cooking.</p>
+          <p class="text-green-700 font-bold mt-2">₹30/kg</p>
+        </div>
+
+        <!-- Brinjal -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <img src="https://media.istockphoto.com/id/182896721/photo/freshly-picked-organic-eggplants.jpg?s=612x612&w=0&k=20&c=HPI5cc3NHcx9CqtK7cIkzVhhtwkzyqBncLZe4qaQJZ8=" alt="Brinjal" class="w-full h-48 object-cover rounded mb-3">
+          <h3 class="text-xl font-semibold text-green-700">Brinjal</h3>
+          <p class="text-gray-700">Organic brinjals grown without chemicals.</p>
+          <p class="text-green-700 font-bold mt-2">₹40/kg</p>
+        </div>
+
+        <!-- Potatoes -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <img src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg" alt="Potatoes" class="w-full h-48 object-cover rounded mb-3">
+          <h3 class="text-xl font-semibold text-green-700">Potatoes</h3>
+          <p class="text-gray-700">Bulk potatoes available in 10kg packs.</p>
+          <p class="text-green-700 font-bold mt-2">₹50/kg</p>
+        </div>
+
+        <!-- Green Chillies -->
+        <div class="bg-white rounded-lg shadow p-4">
+          <img src="https://images.unsplash.com/photo-1524593410820-38510f580a77?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z3JlZW4lMjBjaGlsbGl8ZW58MHx8MHx8fDA%3D" alt="Green Chillies" class="w-full h-48 object-cover rounded mb-3">
+          <h3 class="text-xl font-semibold text-green-700">Green Chillies</h3>
+          <p class="text-gray-700">Spicy green chillies from local farms.</p>
+          <p class="text-green-700 font-bold mt-2">₹40/kg</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

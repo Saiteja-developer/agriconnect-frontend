@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Hub | AgriConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 min-h-screen font-sans flex">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-green-700 text-white min-h-screen p-6 space-y-6">
+    <div class="text-2xl font-bold mb-6">🌿 AgriConnect</div>
+    <nav class="flex flex-col space-y-4">
+      <a href="dashboard.html" class="hover:bg-green-600 px-4 py-2 rounded">📊 Dashboard</a>
+      <a href="crop-planner.html" class="hover:bg-green-600 px-4 py-2 rounded">🌱 Crop Planner</a>
+      <a href="knowledge-hub.html" class="bg-green-800 px-4 py-2 rounded">📚 Knowledge Hub</a>
+      <a href="marketplace.html" class="hover:bg-green-600 px-4 py-2 rounded">🛒 Marketplace</a>
+      <a href="community.html" class="hover:bg-green-600 px-4 py-2 rounded">🤝 Community</a>
+      <a href="login.html" class="hover:bg-green-600 px-4 py-2 rounded text-red-300">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">📚 Farming Knowledge Hub</h2>
+
+      <!-- Search Bar -->
+      <div class="mb-8">
+        <input type="text" id="searchBar" onkeyup="filterArticles()" placeholder="Search articles..." class="w-full p-4 border border-green-400 rounded-lg shadow text-lg" />
+      </div>
+
+      <!-- Articles Grid -->
+      <div id="articleGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Article Card 1 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://www.mosaiccoindia.com/wp-content/uploads/2024/08/soil-health-management-practices-in-india.jpg" alt="Soil Health" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Improving Soil Health for Better Yields</h3>
+          <p class="text-gray-600 text-sm mb-3">Learn how to maintain soil fertility using organic compost, crop rotation, and modern techniques.</p>
+          <a href="https://www.fao.org/soils-portal/soil-management/en/" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+
+        <!-- Article Card 2 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://www.ugaoo.com/cdn/shop/articles/shutterstock_562184122.jpg?v=1661876335" alt="Irrigation Techniques" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Efficient Irrigation Techniques for Indian Farms</h3>
+          <p class="text-gray-600 text-sm mb-3">Discover how drip and sprinkler systems save water and improve crop efficiency in Indian agriculture.</p>
+          <a href="https://www.indiawaterportal.org/articles/types-irrigation-techniques" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+
+        <!-- Article Card 3 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://img.khetivyapar.com/images/blogs/1702368660-organic-plant-vegetables.jpg" alt="Organic Farming" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Benefits of Organic Farming Practices</h3>
+          <p class="text-gray-600 text-sm mb-3">Understand how chemical-free farming improves soil health, sustainability, and crop quality.</p>
+          <a href="https://agricoop.nic.in/sites/default/files/OrganicFarming.pdf" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+
+        <!-- Article Card 4 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwGkOtpOJ0vD0K4otOLhXKFl2aXzsTHY2vNw&s" alt="Pest Management" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Integrated Pest Management (IPM)</h3>
+          <p class="text-gray-600 text-sm mb-3">Explore IPM techniques that reduce dependency on pesticides while protecting crops.</p>
+          <a href="https://www.manage.gov.in/publications/ipm.htm" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+
+        <!-- Article Card 5 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RNt03JpPFf69Kd9HbqrerlSTNEdCc4Mx1w&s" alt="Weather Prediction" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Weather Prediction Tools for Farmers</h3>
+          <p class="text-gray-600 text-sm mb-3">Get familiar with apps and services that help farmers plan based on accurate weather data.</p>
+          <a href="https://mausam.imd.gov.in/imd_latest/contents/agromet/advisoryservices.php" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+
+        <!-- Article Card 6 -->
+        <div class="bg-white rounded-lg shadow p-4 article">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNUDvIYYLYQrVI91l8rsY4I6iGtTFSsunqIA&s" alt="Crop Diversification" class="rounded mb-4 w-full h-48 object-cover">
+          <h3 class="text-xl font-semibold text-green-700 mb-2">Crop Diversification for Risk Management</h3>
+          <p class="text-gray-600 text-sm mb-3">Learn how growing multiple crops can safeguard income and improve land use.</p>
+          <a href="https://niti.gov.in/planningcommission.gov.in/docs/reports/genrep/rep_cropdiv1210.pdf" target="_blank" class="text-green-600 hover:underline">Read More</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function filterArticles() {
+      const input = document.getElementById('searchBar').value.toLowerCase();
+      const articles = document.querySelectorAll('.article');
+
+      articles.forEach(article => {
+        const title = article.querySelector('h3').innerText.toLowerCase();
+        const content = article.querySelector('p').innerText.toLowerCase();
+        article.style.display = (title.includes(input) || content.includes(input)) ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

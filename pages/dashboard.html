@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriConnect Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-50 min-h-screen font-sans flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-green-700 text-white min-h-screen p-6 space-y-6">
+    <div class="text-2xl font-bold mb-6">🌿 AgriConnect</div>
+    <nav class="flex flex-col space-y-4">
+      <a href="dashboard.html" class="hover:bg-green-600 px-4 py-2 rounded">📊 Dashboard</a>
+      <a href="crop-planner.html" class="hover:bg-green-600 px-4 py-2 rounded">🌱 Crop Planner</a>
+      <a href="knowledge-hub.html" class="hover:bg-green-600 px-4 py-2 rounded">📚 Knowledge Hub</a>
+      <a href="marketplace.html" class="hover:bg-green-600 px-4 py-2 rounded">🛒 Marketplace</a>
+      <a href="community.html" class="hover:bg-green-600 px-4 py-2 rounded">🤝 Community</a>
+      <a href="login.html" class="hover:bg-green-600 px-4 py-2 rounded text-red-300">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl font-bold text-green-700 text-center mb-8">🌿 AgriConnect Dashboard</h1>
+
+      <!-- 📍 City Selector -->
+      <div class="bg-white p-6 rounded shadow mb-6">
+        <h2 class="text-xl font-semibold text-green-700 mb-2">📍 Choose City for Weather & Rainfall</h2>
+        <select id="citySelector" onchange="loadWeather()" class="border px-3 py-2 rounded w-full">
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Chennai">Chennai</option>
+        </select>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- 🌦️ Weather Forecast -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-xl font-semibold text-green-700">🌦️ Weather Forecast</h2>
+          <p id="cityName" class="text-gray-700 mt-2">Location: --</p>
+          <p id="weatherCondition" class="text-gray-700">Condition: --</p>
+          <p id="temperature" class="text-gray-700">Temperature: --</p>
+          <p id="humidity" class="text-gray-700">Humidity: --</p>
+        </div>
+
+        <!-- 🌧️ Rainfall Prediction -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-xl font-semibold text-green-700">🌧️ Rainfall Prediction</h2>
+          <p id="rainfall" class="text-gray-700 mt-2">Expected Rainfall: --</p>
+          <p id="nextRain" class="text-gray-700">Next Rain: --</p>
+        </div>
+
+        <!-- 🌿 Crop Suggestions -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-xl font-semibold text-green-700">🌿 Crop Suggestion</h2>
+          <ul id="cropSuggestions" class="list-disc list-inside text-gray-700 mt-2">
+            <li>Maize</li>
+            <li>Tomatoes</li>
+            <li>Millets</li>
+          </ul>
+        </div>
+
+        <!-- 📅 Reminders -->
+        <!-- 📅 Reminders -->
+<!-- 📅 Reminders -->
+<div class="bg-white p-6 rounded shadow md:col-span-2 lg:col-span-1">
+  <h2 class="text-xl font-semibold text-green-700">📅 Reminders</h2>
+  <ul id="reminderList" class="list-disc list-inside text-gray-700 mt-2"></ul>
+
+  <input id="reminderText" type="text" placeholder="Reminder (e.g. Water plants)" class="mt-4 w-full border px-3 py-2 rounded" />
+  <input id="reminderTime" type="time" class="mt-2 w-full border px-3 py-2 rounded" />
+
+  <button onclick="addReminder()" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add</button>
+  <button onclick="clearReminders()" class="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Clear All</button>
+</div>
+
+
+</div>
+
+
+        <!-- 📈 Soil Health -->
+        
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const apiKey = "60a620ed6ea621ac804d19908b972ade";
+
+    async function loadWeather() {
+      const city = document.getElementById("citySelector").value;
+
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+        const data = await res.json();
+
+        const toTime = (unix) =>
+          new Date(unix * 1000).toLocaleTimeString('en-IN', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+
+        document.getElementById("cityName").textContent = `Location: ${data.name}`;
+        document.getElementById("weatherCondition").textContent = `Condition: ${data.weather?.[0]?.description ?? "--"}`;
+        document.getElementById("temperature").textContent = `Temperature: ${data.main?.temp ?? "--"}°C`;
+        document.getElementById("humidity").textContent = `Humidity: ${data.main?.humidity ?? "--"}%`;
+
+        document.querySelectorAll(".weather-extra").forEach(el => el.remove());
+
+        document.getElementById("weatherCondition").insertAdjacentHTML("afterend", `
+          <div class="weather-extra">
+            <p class="text-gray-700">Feels Like: ${data.main?.feels_like ?? "--"}°C</p>
+            <p class="text-gray-700">Wind: ${data.wind?.speed ?? "--"} km/h</p>
+            <p class="text-gray-700">Sunrise: ${toTime(data.sys?.sunrise)}</p>
+            <p class="text-gray-700">Sunset: ${toTime(data.sys?.sunset)}</p>
+          </div>
+        `);
+
+        loadRainfallForecast(city);
+
+      } catch (err) {
+        console.error("Weather error:", err);
+        const fields = ["cityName", "weatherCondition", "temperature", "humidity", "rainfall", "nextRain"];
+        fields.forEach(id => document.getElementById(id).textContent = "--");
+        document.getElementById("cityName").textContent = "❌ Weather data not available";
+      }
+    }
+
+    async function loadRainfallForecast(city) {
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`);
+        const data = await res.json();
+
+        const rainForecasts = data.list.filter(f => f.rain && (f.rain["3h"] || f.rain["1h"]));
+
+        if (rainForecasts.length === 0) {
+          document.getElementById("rainfall").textContent = "Expected Rainfall: 0 mm";
+          document.getElementById("nextRain").textContent = "No rain in next 5 days";
+          return;
+        }
+
+        let totalRain = 0;
+        for (let f of rainForecasts) {
+          totalRain += f.rain["3h"] || f.rain["1h"] || 0;
+        }
+
+        const nextRainTime = new Date(rainForecasts[0].dt * 1000).toLocaleString('en-IN', {
+          weekday: 'short',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        document.getElementById("rainfall").textContent = `Expected Rainfall: ${totalRain.toFixed(1)} mm (next 5 days)`;
+        document.getElementById("nextRain").textContent = `Next Rain: ${nextRainTime}`;
+
+        const temperature = parseFloat(document.getElementById("temperature").textContent.replace(/[^\d.]/g, "")) || 0;
+        const humidity = parseFloat(document.getElementById("humidity").textContent.replace(/[^\d.]/g, "")) || 0;
+        const condition = document.getElementById("weatherCondition").textContent.split(":")[1]?.trim() || "";
+
+        sendToSmartCropRecommendation({ temperature, humidity, rainfall: totalRain, condition });
+
+      } catch (err) {
+        console.error("Rainfall error:", err);
+        document.getElementById("rainfall").textContent = "Rainfall: --";
+        document.getElementById("nextRain").textContent = "Forecast unavailable";
+      }
+    }
+
+    const savedCrops = localStorage.getItem('recommendedCrops');
+    if (savedCrops) {
+      const cropList = JSON.parse(savedCrops);
+      const ul = document.getElementById('cropSuggestions');
+      ul.innerHTML = "";
+      cropList.forEach(crop => {
+        const li = document.createElement("li");
+        li.textContent = crop;
+        ul.appendChild(li);
+      });
+    }
+
+    const reminderList = document.getElementById("reminderList");
+    const reminderInput = document.getElementById("reminderInput");
+
+   
+
+    function addReminder() {
+  const text = document.getElementById("reminderText").value.trim();
+  const time = document.getElementById("reminderTime").value;
+  if (!text || !time) return;
+
+  const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+  reminders.push({ text, time });
+  localStorage.setItem("reminders", JSON.stringify(reminders));
+
+  document.getElementById("reminderText").value = "";
+  document.getElementById("reminderTime").value = "";
+  loadReminders();
+}
+
+function loadReminders() {
+  const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+  const reminderList = document.getElementById("reminderList");
+  reminderList.innerHTML = "";
+
+  reminders.forEach(reminder => {
+    const li = document.createElement("li");
+    li.textContent = `${reminder.text} at ${reminder.time}`;
+    reminderList.appendChild(li);
+  });
+}
+function clearReminders() {
+  if (confirm("Are you sure you want to clear all reminders?")) {
+    localStorage.removeItem("reminders");
+    loadReminders();
+  }
+}
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadReminders();
+      loadWeather();
+    });
+
+  async function sendToSmartCropRecommendation(weatherData) {
+    // Logging weather data to debug
+    console.log("Weather data received for recommendation:", weatherData);
+
+    // 🌡️ Temperature-based recommendation logic
+    let crops = [];
+
+    if (weatherData.temperature >= 30) {
+      crops = ["Bajra (Pearl Millet)", "Sorghum", "Cluster Beans"];
+    } else if (weatherData.temperature >= 28 && weatherData.temperature < 30) {
+      crops = ["Maize", "Groundnut", "Cotton"];
+    } else if (weatherData.temperature >= 20 && weatherData.temperature < 28) {
+      crops = ["Wheat", "Barley", "Mustard"];
+    } else if (weatherData.temperature >= 10 && weatherData.temperature < 20) {
+      crops = ["Peas", "Spinach", "Cabbage"];
+    } else {
+      crops = ["None - temperature too low for recommended crops"];
+    }
+
+    const ul = document.getElementById("cropSuggestions");
+    ul.innerHTML = "";
+
+    crops.forEach(crop => {
+      const li = document.createElement("li");
+      li.textContent = crop;
+      ul.appendChild(li);
+    });
+    function checkReminders() {
+  const reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0, 5); // Format: HH:MM
+
+  reminders.forEach(reminder => {
+    if (reminder.time === currentTime) {
+      showReminder(reminder.text);
+    }
+  });
+}
+
+function showReminder(text) {
+  alert(`🔔 Reminder: ${text}`);
+}
+setInterval(checkReminders, 60000); // check every 60 seconds
+function showReminder(text) {
+  if (Notification.permission === "granted") {
+    new Notification("🌿 AgriConnect Reminder", { body: text });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        new Notification("🌿 AgriConnect Reminder", { body: text });
+      }
+    });
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  Notification.requestPermission();
+  loadReminders();
+  loadWeather();
+});
+
+
+    // Optionally save it in localStorage
+    localStorage.setItem("recommendedCrops", JSON.stringify(crops));
+  }
+  </script>
+</body>
+</html>

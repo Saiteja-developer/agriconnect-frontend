@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Crop Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 min-h-screen font-sans flex">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-64 bg-green-700 text-white min-h-screen p-6 space-y-6">
+    <div class="text-2xl font-bold mb-6">🌿 AgriConnect</div>
+    <nav class="flex flex-col space-y-4">
+      <a href="dashboard.html" class="hover:bg-green-600 px-4 py-2 rounded">📊 Dashboard</a>
+      <a href="crop-planner.html" class="bg-green-800 px-4 py-2 rounded">🌱 Crop Planner</a>
+      <a href="knowledge-hub.html" class="hover:bg-green-600 px-4 py-2 rounded">📚 Knowledge Hub</a>
+      <a href="marketplace.html" class="hover:bg-green-600 px-4 py-2 rounded">🛒 Marketplace</a>
+      <a href="community.html" class="hover:bg-green-600 px-4 py-2 rounded">🤝 Community</a>
+      <a href="login.html" class="hover:bg-green-600 px-4 py-2 rounded text-red-300">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-3xl font-bold text-green-700 text-center mb-6">🌾 Smart Crop Planner</h2>
+
+      <!-- 📥 Smart Form -->
+      <form id="plannerForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <input id="location" type="text" placeholder="Your Location" class="border px-4 py-2 rounded w-full" required />
+        <input id="soilType" type="text" placeholder="Soil Type" class="border px-4 py-2 rounded w-full" required />
+        <input id="farmSize" type="text" placeholder="Farm Size (acres)" class="border px-4 py-2 rounded w-full" />
+        <input id="previousCrops" type="text" placeholder="Previous Crops" class="border px-4 py-2 rounded w-full" />
+        <button type="submit" class="bg-green-600 text-white col-span-1 md:col-span-2 py-2 rounded hover:bg-green-700">
+          Get Recommendations
+        </button>
+      </form>
+
+      <!-- 🌱 Result Area -->
+      <div id="recommendationResult" class="mt-6 text-lg text-green-700 font-semibold text-center"></div>
+
+      <!-- 🌤️ Weather & Suggestions -->
+      <div class="grid md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-green-100 p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-green-800">🌦️ Weather Forecast</h3>
+          <p class="text-gray-700 mt-2">Sunny, 32°C</p>
+          <p class="text-gray-700">Humidity: 45%</p>
+          <p class="text-gray-700">Wind: 12 km/h</p>
+        </div>
+
+        <div class="bg-green-100 p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-green-800">🌧️ Rainfall Forecast</h3>
+          <p class="text-gray-700 mt-2">Expected Rainfall: 10 mm</p>
+          <p class="text-gray-700">Next Rain: In 3 Days</p>
+        </div>
+
+        <div class="bg-green-100 p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-green-800">🌿 Sample Crops</h3>
+          <ul class="list-disc list-inside text-gray-700 mt-2">
+            <li>Maize</li>
+            <li>Tomatoes</li>
+            <li>Millets</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-10 text-center">
+        <p class="text-gray-600">These recommendations are based on basic AI and recent weather conditions in your area.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("plannerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const location = document.getElementById("location").value;
+      const soilType = document.getElementById("soilType").value;
+      const farmSize = document.getElementById("farmSize").value;
+      const previousCrops = document.getElementById("previousCrops").value;
+
+      const resultBox = document.getElementById("recommendationResult");
+
+      try {
+        const res = await fetch("https://agriconnect-backend-ckok.onrender.com/api/recommendations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ location, soilType, farmSize, previousCrops })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          resultBox.innerHTML = "🌱 Recommended Crops: " + data.crops.join(", ");
+        } else {
+          resultBox.innerHTML = "❌ Error: " + data.message;
+        }
+      } catch (err) {
+        resultBox.innerHTML = "❌ Failed to connect to backend.";
+        console.error("Error:", err);
+      }
+    });
+  </script>
+</body>
+</html>
