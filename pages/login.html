@@ -12,8 +12,15 @@
 
     <!-- Tabs -->
     <div class="flex justify-center mb-6">
-      <button onclick="showLogin()" class="mx-2 px-4 py-2 bg-green-600 text-white rounded">Login</button>
-      <button onclick="showSignup()" class="mx-2 px-4 py-2 bg-gray-200 text-green-600 rounded">Signup</button>
+      <button id="loginTab" onclick="showLogin()" 
+        class="mx-2 px-4 py-2 bg-green-600 text-white rounded transition">
+        Login
+      </button>
+
+      <button id="signupTab" onclick="showSignup()" 
+        class="mx-2 px-4 py-2 bg-gray-200 text-green-600 rounded transition">
+        Signup
+      </button>
     </div>
 
     <!-- Login Form -->
@@ -28,8 +35,16 @@
       <input id="fullName" type="text" placeholder="Full Name" class="w-full border px-4 py-2 rounded" required />
       <input id="mobile" type="tel" placeholder="Mobile Number" class="w-full border px-4 py-2 rounded" required />
       <input id="email" type="email" placeholder="Email" class="w-full border px-4 py-2 rounded" required />
+
       <input id="signupUsername" type="text" placeholder="Username" class="w-full border px-4 py-2 rounded" required />
-      <input id="signupPassword" type="password" placeholder="Password" class="w-full border px-4 py-2 rounded" required />
+
+      <!-- PASSWORD -->
+      <div>
+        <input id="signupPassword" type="password" placeholder="Password (Strong Password Required)" 
+               class="w-full border px-4 py-2 rounded" required />
+        <p id="passwordStrength" class="text-sm mt-1"></p>
+      </div>
+
       <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Signup</button>
     </form>
 
@@ -38,16 +53,72 @@
   </div>
 
   <script>
+
+    // ---------------- TAB SWITCH ----------------
     function showLogin() {
       document.getElementById('loginForm').classList.remove('hidden');
       document.getElementById('signupForm').classList.add('hidden');
+
+      const loginTab = document.getElementById('loginTab');
+      const signupTab = document.getElementById('signupTab');
+
+      loginTab.classList.remove("bg-gray-200", "text-green-600");
+      loginTab.classList.add("bg-green-600", "text-white");
+
+      signupTab.classList.remove("bg-green-600", "text-white");
+      signupTab.classList.add("bg-gray-200", "text-green-600");
     }
 
     function showSignup() {
       document.getElementById('signupForm').classList.remove('hidden');
       document.getElementById('loginForm').classList.add('hidden');
+
+      const loginTab = document.getElementById('loginTab');
+      const signupTab = document.getElementById('signupTab');
+
+      signupTab.classList.remove("bg-gray-200", "text-green-600");
+      signupTab.classList.add("bg-green-600", "text-white");
+
+      loginTab.classList.remove("bg-green-600", "text-white");
+      loginTab.classList.add("bg-gray-200", "text-green-600");
     }
 
+
+    // ---------------- PASSWORD STRENGTH CHECKER ----------------
+    const passwordInput = document.getElementById("signupPassword");
+    const passwordStrength = document.getElementById("passwordStrength");
+
+    passwordInput.addEventListener("input", () => {
+      const pwd = passwordInput.value;
+
+      const uppercase = /[A-Z]/.test(pwd);
+      const lowercase = /[a-z]/.test(pwd);
+      const number = /[0-9]/.test(pwd);
+      const special = /[^A-Za-z0-9]/.test(pwd);
+      const length = pwd.length >= 8;
+
+      if (uppercase && lowercase && number && special && length) {
+        passwordStrength.textContent = "Strong Password ✔";
+        passwordStrength.className = "text-green-600 text-sm";
+      } else {
+        passwordStrength.textContent =
+          "Password must contain uppercase, lowercase, number, special character & 8+ chars";
+        passwordStrength.className = "text-red-600 text-sm";
+      }
+    });
+
+    function isPasswordStrong(pwd) {
+      return (
+        /[A-Z]/.test(pwd) &&
+        /[a-z]/.test(pwd) &&
+        /[0-9]/.test(pwd) &&
+        /[^A-Za-z0-9]/.test(pwd) &&
+        pwd.length >= 8
+      );
+    }
+
+
+    // ---------------- LOGIN ----------------
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('loginUsername').value;
@@ -60,30 +131,47 @@
       });
 
       const messageEl = document.getElementById('message');
-      console.log("Response status:", res.status);
 
       if (res.ok) {
-        messageEl.textContent = "✅ Login successful!";
-        window.location.href = "dashboard.html"; // if inside public or root path
-   // or home.html or index.html
-
+        messageEl.textContent = " Login successful!";
         messageEl.classList.remove("text-red-600");
         messageEl.classList.add("text-green-600");
+        window.location.href = "dashboard.html";
       } else {
         const text = await res.text();
-        messageEl.textContent = "❌ " + text;
+        messageEl.textContent = " " + text;
         messageEl.classList.remove("text-green-600");
         messageEl.classList.add("text-red-600");
       }
     });
 
+
+    // ---------------- SIGNUP ----------------
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const fullName = document.getElementById('fullName').value;
       const mobile = document.getElementById('mobile').value;
       const email = document.getElementById('email').value;
       const username = document.getElementById('signupUsername').value;
       const password = document.getElementById('signupPassword').value;
+
+      const messageEl = document.getElementById('message');
+
+      // EMAIL VALIDATION
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!emailValid) {
+        messageEl.textContent = " Please enter a valid email address.";
+        messageEl.classList.add("text-red-600");
+        return;
+      }
+
+      // PASSWORD VALIDATION
+      if (!isPasswordStrong(password)) {
+        messageEl.textContent = " Password is not strong enough.";
+        messageEl.classList.add("text-red-600");
+        return;
+      }
 
       const res = await fetch('https://agriconnect-backend-ckok.onrender.com/api/auth/signup', {
         method: 'POST',
@@ -91,18 +179,18 @@
         body: JSON.stringify({ fullName, mobile, email, username, password })
       });
 
-      const messageEl = document.getElementById('message');
       if (res.ok) {
-        messageEl.textContent = "✅ Signup successful!";
+        messageEl.textContent = " Signup successful!";
         messageEl.classList.remove("text-red-600");
         messageEl.classList.add("text-green-600");
       } else {
         const text = await res.text();
-        messageEl.textContent = "❌ " + text;
+        messageEl.textContent = " " + text;
         messageEl.classList.remove("text-green-600");
         messageEl.classList.add("text-red-600");
       }
     });
+
   </script>
 </body>
 </html>
