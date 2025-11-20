@@ -1,0 +1,14 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    - cron: "* * * * *"     # runs every 1 minute
+  workflow_dispatch:         # lets you run manually
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call backend /ping
+        run: |
+          curl -I https://agriconnect-backend-ckok.onrender.com/ping || true
