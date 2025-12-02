@@ -2,7 +2,7 @@ name: Keep Backend Alive
 
 on:
   schedule:
-    - cron: "* * * * *"     # runs every 1 minute
+    - cron: "0 0 * * *"     # runs once a day at midnight UTC
   workflow_dispatch:         # lets you run manually
 
 jobs:
